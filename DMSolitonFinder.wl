@@ -4,13 +4,13 @@
 (* Title: DMSolitonFinder *)
 (* Author: Hong-Yi Zhang *)
 (* Website: https://hongyi18.github.io *)
-(* Package Version: 1.0 *)
+(* Package Version: 1.1 *)
 (* Mathematica Version: 13.3.1 *)
-(* Date: Jun 10, 2024 *) 
+(* Date: Jun 15, 2026 *) 
 
 BeginPackage["DMSolitonFinder`"];
-Print["DMSolitonFinder 1.0 has been loaded."];
-Print["Please cite ", Hyperlink["arXiv:2406.05031", "https://arxiv.org/abs/2406.05031"], " if you find this package helpful for your research."]
+Print["DMSolitonFinder 1.1 has been loaded."];
+Print["Please cite ", Hyperlink["arXiv:2406.05031", "https://arxiv.org/abs/2406.05031"], " if you find this package helpful."]
 
 
 MassDensity::usage = "
@@ -120,7 +120,7 @@ ShootFields[fi_, opts:OptionsPattern[]] := Block[
 	{\[CapitalPsi]i=OptionValue[InitialValuePsi], d\[CapitalPsi]=OptionValue[InitialStepPsi], rf=OptionValue[InitialMaxRadius], drf=OptionValue[InitialStepRadius]
 	, ifSolsUpdate\[CapitalPsi]iError=0, ifSolsUpdaterfError=0, nPointLargeRadius=5, precision=10^(-OptionValue[WorkingPrecision]+1)
 	, iffiReachCriticalValue=0, ifInitialError=0, ifInitial\[CapitalPsi]iTooBig=0, ifd\[CapitalPsi]TooSmall=0, ifdrfTooSmall=0, ifMaxIterationReached=0
-	, sols, firstMinimum, ampLargeRadius=Infinity, \[CapitalPsi]iTest, rfTest, nStop}
+	, sols, firstMinimum, ampLargeRadius, \[CapitalPsi]iTest, rfTest, nStop}
 	
 	(* Solve field equations. If error occurs in solving the equations, return the trivial solutions of the system. *)
 	(* For the shooting algorithm to work, the initial \[CapitalPsi]i should be such small that the first local minimum of f[r] is negative. *)
@@ -173,6 +173,8 @@ ShootFields[fi_, opts:OptionsPattern[]] := Block[
 		, Print["For fi=", fi, ", initial guesses are bad or some other error messages are generated."]
 		; SolveFields[fi, \[CapitalPsi]i, rf, Evaluate@FilterRules[Join[{opts}, Options[ShootFields]], Options[SolveFields]]] ]
 	; If[ifInitial\[CapitalPsi]iTooBig==1, Print["For fi=", fi, ", the initial value \[CapitalPsi]i is too big. Try decreasing InitialValuePsi."]]
+
+	; If[Not[NumericQ[ampLargeRadius]], ampLargeRadius=calAmpLargeRadius[sols[[1]], rf, OptionValue[AmpCheckRangeRatio], nPointLargeRadius]]
 	; If[ampLargeRadius > OptionValue[AmpTolerance] fi
 		, If[ifd\[CapitalPsi]TooSmall==1, Print["For fi=", fi, ", requested precision is reached after ", nStop, " calculations, relative amplitude at large radius is ", ampLargeRadius/fi, "."]]
 		; If[ifdrfTooSmall==1, Print["For fi=", fi, ", increasing rf doesn't improve results after ", nStop, " calculations, relative amplitude at large radius is ", ampLargeRadius/fi, "."]]
