@@ -58,3 +58,10 @@ If you use this code as part of your research, please cite [arXiv:2406.05031](ht
 
 ## Contact
 If you find any bugs, please report them to my email address displayed on [my website](https://hongyi18.github.io/).
+
+## Version history
+- V1.1: Jun 15, 2026. Fix the problem that an undesired soliton profile may pass solution tests inside ShootFields due to nonnumeric "ampLargeRadius"; add SyntaxInformation for CalEnergy.
+- V1.0: Jun 10, 2024. Release the package.
+
+## Acknowledgments
+I would like to thank Yitang Chen for reporting bugs.
