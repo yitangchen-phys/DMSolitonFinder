@@ -120,7 +120,7 @@ ShootFields[fi_, opts:OptionsPattern[]] := Block[
 	{\[CapitalPsi]i=OptionValue[InitialValuePsi], d\[CapitalPsi]=OptionValue[InitialStepPsi], rf=OptionValue[InitialMaxRadius], drf=OptionValue[InitialStepRadius]
 	, ifSolsUpdate\[CapitalPsi]iError=0, ifSolsUpdaterfError=0, nPointLargeRadius=5, precision=10^(-OptionValue[WorkingPrecision]+1)
 	, iffiReachCriticalValue=0, ifInitialError=0, ifInitial\[CapitalPsi]iTooBig=0, ifd\[CapitalPsi]TooSmall=0, ifdrfTooSmall=0, ifMaxIterationReached=0
-	, sols, firstMinimum, ampLargeRadius, \[CapitalPsi]iTest, rfTest, nStop}
+	, sols, firstMinimum, ampLargeRadius=Infinity, \[CapitalPsi]iTest, rfTest, nStop}
 	
 	(* Solve field equations. If error occurs in solving the equations, return the trivial solutions of the system. *)
 	(* For the shooting algorithm to work, the initial \[CapitalPsi]i should be such small that the first local minimum of f[r] is negative. *)
@@ -224,6 +224,7 @@ Protect[CalFrequency];
 Unprotect[CalEnergy];
 Options[CalEnergy] = Join[{SI->0, Spin->0, MinRadius->10^-7}, Options[MassDensity], Options[NIntegrate]];
 SetOptions[CalEnergy, AccuracyGoal->8, PrecisionGoal->8, Method->{Automatic,"SymbolicProcessing"->0}];
+SyntaxInformation[CalEnergy] = {"ArgumentsPattern" -> {_, _, _, _, OptionsPattern[]}};
 CalEnergy[f_, \[CapitalPsi]_, \[Mu]_, rf_, opts:OptionsPattern[]] := 4 \[Pi] NIntegrate[r^2 (1/2 Derivative[1][f][r]^2 + 1/2 (\[CapitalPsi][r]-\[Mu]) MassDensity[f, r, Evaluate@FilterRules[Join[{opts}, Options[CalEnergy]], Options[MassDensity]]] + (1-Abs[OptionValue[Spin]]/3)/16 OptionValue[SI] f[r]^4)
 	, {r, OptionValue[MinRadius], rf}
 	, Evaluate@FilterRules[Join[{opts}, Options[CalEnergy]], Options[NIntegrate]]];
